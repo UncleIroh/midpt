@@ -1,31 +1,48 @@
 {
-  "name": "asongisastory",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
-  },
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "NODE_ENV=production node server/server.js",
+    "build": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development node server/server.js & webpack-dev-server --open",
+    "gulp-prod": "node_modules/.bin/gulp prod",
+    "gulp-dev": "node_modules/.bin/gulp dev"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+  "nodemonConfig": {
+    "ignore": [
+      "build",
+      "client"
     ]
+  },
+  "author": "CodesmithLLC https://github.com/CodesmithLLC <hello@codesmith.io>",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^10.2.4",
+    "express": "^4.12.3",
+    "gulp": "^3.9.0",
+    "imagemin-webpack-plugin": "^2.4.2",
+    "node-sass": "^4.12.0",
+    "prop-types": "^15.6.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.3.1",
+    "sass-loader": "^7.1.0",
+    "webpack": "^4.29.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.1",
+    "isomorphic-fetch": "^2.2.1",
+    "mini-css-extract-plugin": "^0.7.0",
+    "nodemon": "^1.18.9",
+    "style-loader": "^0.23.1",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.7.1"
   }
 }
