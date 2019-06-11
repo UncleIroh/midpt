@@ -1,14 +1,12 @@
 {
-  "name": "",
+  "name": "a_song_is_a_story",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node server/server.js",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development node server/server.js & webpack-dev-server --open",
-    "gulp-prod": "node_modules/.bin/gulp prod",
-    "gulp-dev": "node_modules/.bin/gulp dev"
+    "dev": "NODE_ENV=development node server/server.js & webpack-dev-server --open"
   },
   "nodemonConfig": {
     "ignore": [
@@ -16,14 +14,13 @@
       "client"
     ]
   },
-  "author": "CodesmithLLC https://github.com/CodesmithLLC <hello@codesmith.io>",
+  "author": "Jacob Richards",
   "license": "ISC",
   "dependencies": {
-    "browserify": "^10.2.4",
+    "acorn": "^6.1.1",
     "express": "^4.12.3",
-    "gulp": "^3.9.0",
-    "imagemin-webpack-plugin": "^2.4.2",
     "node-sass": "^4.12.0",
+    "normalize.css": "^8.0.1",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.3.1",
