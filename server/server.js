@@ -3,10 +3,11 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
+const isochroneController = require('./isochroneController');
+
+console.log(process.env);
+// setup!
 app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === 'production') {
@@ -19,31 +20,17 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(3000); //listens on port 3000 -> http://localhost:3000/
-
+console.log('this works, at least');
 // routes here
+app.post(
+  '/buildroute',
+  isochroneController.getCoords,
+  isochroneController.generateRoutes,
+  (req, res) => {
+    res.json({ fairTime: res.locals.fairTime });
+  }
+);
 
 app.get('/api/', (req, res) => {
   //do stuff
 });
-
-// const promArr = [];
-
-// promArr.push(
-//   new Promise((resolve, reject) => {
-//     request.get(url1, (err, data) => {
-//       // do stuff with data or something
-//       resolve(data);
-//     });
-//   })
-// );
-
-// promArr.push(
-//   new Promise((resolve, reject) => {
-//     request.get(url2, (err, data) => {
-//       // do stuff with data or something
-//       resolve(data);
-//     });
-//   })
-// );
-
-// Promise.all(promArr).then(valuesArr => {});
