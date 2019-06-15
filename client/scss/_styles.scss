@@ -10,23 +10,37 @@ figure {
   margin: 0;
 }
 .mapContainer {
-  background: rgb(220, 220, 220);
+  background: rgba(220, 220, 220, 0.8);
   border-radius: 20px;
   overflow: hidden;
   margin: 40px auto;
   width: 90%;
   max-width: 570px;
 }
-.mapContainer span {
-  display: block;
-  margin: 10px 0;
+.mapContainer .titleBar {
+  margin: 15px 14px;
   font-size: 1.17em;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+.mapContainer .titleBar span {
   font-weight: 500;
   color: rgba(0, 0, 0, 0.75);
+  text-align: left;
+  text-overflow: ellipsis;
 }
-.mapContainer span strong {
+.mapContainer .titleBar span strong {
   font-weight: 600;
   color: black;
+}
+.mapContainer .titleBar a {
+  text-align: right;
+  font-weight: 600;
+  text-decoration: none;
+  color: rgb(0, 122, 255);
 }
 .map {
   width: 100%;

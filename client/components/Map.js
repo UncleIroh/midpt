@@ -28,9 +28,19 @@ const Map = (props) => {
   setTimeout(() => {
     initMap(props.point, props.midpt, id);
   }, 1000);
+  // split address string from server into its parts (for display)
+  const addressParts = props.address.split(', ');
+  const address = addressParts[0];
+  const city = addressParts[1];
+  const state = (addressParts[2]);
+  // state.replace(/[^\d](\d{5})[^\d]/g, '');
+  const cityState = city + ', ' + state;
   return (
     <div className="mapContainer">
-      <span><strong>{'From ' + props.mapTitle}</strong>{' (' + props.address + ') '}<strong>{'to Midpoint'}</strong></span>
+      <div className="titleBar">
+        <span><strong>{'From ' + address}</strong>{' (' + city + ') '}<strong>{'to Midpoint'}</strong></span>
+        <a href={props.url}>Directions</a>
+      </div>
       <figure className="map" id={id}></figure>
     </div>
   );
