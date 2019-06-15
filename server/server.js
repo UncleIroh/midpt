@@ -1,8 +1,13 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+require('dotenv').config()
+const bodyParser = require('body-parser');
+const isochroneController = require('./isochroneController');
 
+console.log(process.env);
 // setup!
+app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === 'production') {
   // statically serve everything in the build folder on the route '/build'
@@ -13,10 +18,16 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(3000); //listens on port 3000 -> http://localhost:3000/
 
+app.listen(3000); //listens on port 3000 -> http://localhost:3000/
+console.log('this works, at least')
 // routes here
+app.post('/buildroute', isochroneController.getCoords, isochroneController.generateRoutes, (req, res) => {
+  res.json({fairTime: res.locals.fairTime});
+ })
 
 app.get('/api/', (req, res) => {
   //do stuff
 });
+
+module.exports = app;
