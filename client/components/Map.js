@@ -44,6 +44,6 @@ const Map = (props) => {
       <figure className="map" id={id}></figure>
     </div>
   );
-}
+};
 
 export default Map;

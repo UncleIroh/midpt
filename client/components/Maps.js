@@ -11,23 +11,24 @@ const GoogleMapsAPI = new Promise((res, err) => {
 });
 
 const Maps = (props) => {
+  const mapComponents = [];
+  if (props.result) {
+    if (props.result.point1) {
+      mapComponents.push(
+        <Map key={1} keyVal={1} address={props.result.address1} point={props.result.point1} midpt={props.result.midpt} url={props.result.aToMidptURL} />
+      );
+    }
+    if (props.result.point2) {
+      mapComponents.push(
+        <Map key={2} keyVal={2} address={props.result.address2} point={props.result.point2} midpt={props.result.midpt} url={props.result.bToMidptURL} />
+      );
+    }
+  }
   return (
     <section id="maps">
-      <Map key={1} keyVal={1} address={props.result.address1} point={props.result.point1} midpt={props.result.midpt} url={props.result.aToMidptURL} />
-      <Map key={2} keyVal={2} address={props.result.address2} point={props.result.point2} midpt={props.result.midpt} url={props.result.bToMidptURL} />
+      {mapComponents}
     </section>
   );
-}
+};
 
 export default Maps;
-
-// const scriptPromise = new Promise((resolve, reject) => {
-//   const script = document.createElement('script');
-//   document.body.appendChild(script);
-//   script.onload = resolve;
-//   script.onerror = reject;
-//   script.async = true;
-//   script.src = 'foo.js';
-// });
-//
-// scriptPromise.then(() => { ... });
