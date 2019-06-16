@@ -1,5 +1,8 @@
 const webpack = require('webpack');
+<<<<<<< HEAD
 const myEnv = require('dotenv').config();
+=======
+>>>>>>> e2a7fca227fda25372cdabf99a5da9800a406a1d
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
@@ -46,9 +49,12 @@ module.exports = {
     ]
   },
   plugins: [
+<<<<<<< HEAD
     new webpack.DefinePlugin({
       GAPI_KEY: JSON.stringify(myEnv.parsed.GAPI_KEY),
     }),
+=======
+>>>>>>> e2a7fca227fda25372cdabf99a5da9800a406a1d
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
