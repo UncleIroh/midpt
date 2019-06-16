@@ -168,26 +168,18 @@
         function drawTimeMap(map, response) {
           // Reference for the response: http://docs.traveltimeplatform.com/reference/time-map/#response-body-json-attributes
           isochronePoints = [
-            { lat: 40.7353398, lng: -74.00894174000001 },
-            { lat: 40.73474564, lng: -74.00834758 },
-            { lat: 40.73474564, lng: -74.0029519 },
-            { lat: 40.7365442, lng: -74.00115334 },
-            { lat: 40.7365442, lng: -73.99935478 },
-            { lat: 40.73834276, lng: -73.99755622 },
-            { lat: 40.73834276, lng: -73.99665694 },
-            { lat: 40.7387924, lng: -73.9962073 },
-            { lat: 40.7393624, lng: -73.9962073 },
-            { lat: 40.7393624, lng: -73.99682562 },
-            { lat: 40.73846312, lng: -73.9977249 },
-            { lat: 40.7393624, lng: -73.99862418 },
-            { lat: 40.7393624, lng: -74.0022213 },
-            { lat: 40.74026168, lng: -74.00312058 },
-            { lat: 40.74026168, lng: -74.00491914 },
-            { lat: 40.73801348, lng: -74.00716734 },
-            { lat: 40.73621492, lng: -74.00716734 },
-            { lat: 40.73576528, lng: -74.00761698 },
-            { lat: 40.73576528, lng: -74.00851626 },
-            { lat: 40.7353398, lng: -74.00894174000001 }
+            { lat: 34.23846287941431, lng: -118.1217555 },
+            { lat: 34.20343668475057, lng: -118.08671116816654 },
+            { lat: 34.19094240689517, lng: -118.01175876139186 },
+            { lat: 34.08721977688633, lng: -117.91252680779743 },
+            { lat: 34.06835462996456, lng: -118.05865697426108 },
+            { lat: 34.070234491106106, lng: -118.1217555 },
+            { lat: 34.070348884650734, lng: -118.18340511489775 },
+            { lat: 34.097622723105566, lng: -118.29896721588553 },
+            { lat: 34.19600862300492, lng: -118.24734444852491 },
+            { lat: 34.21501791820113, lng: -118.16521409046206 },
+            { lat: 34.23846287941431, lng: -118.1217555 },
+            { lat: 34.23846287941431, lng: -118.1217555 }
           ];
           var shapesCoords = response.results[0].shapes.map(function(polygon) {
             var shell = ringCoordsHashToArray(isochronePoints);
@@ -197,9 +189,31 @@
           var polygon = L.polygon(shapesCoords, { color: 'red' });
           polygon.addTo(map);
 
-          L.marker({ lat: 40.731167, lng: -74.000727 }).addTo(map);
-          L.marker({ lat: 40.743731, lng: -74.006026 }).addTo(map);
-          L.marker({ lat: 40.7375466, lng: -74.0025111 }).addTo(map);
+          isochronePoints2 = [
+            { lat: 34.088578771213434, lng: -118.4735095 },
+            { lat: 34.07209617430703, lng: -118.43611117796348 },
+            { lat: 34.0659535683731, lng: -118.33399266276709 },
+            { lat: 33.996718695875096, lng: -118.3999433099474 },
+            { lat: 33.96701528207636, lng: -118.4345620849502 },
+            { lat: 33.960602291562914, lng: -118.4735095 },
+            { lat: 33.92797378413695, lng: -118.54082222365983 },
+            { lat: 33.943698004026, lng: -118.71025660048623 },
+            { lat: 34.0631018303177, lng: -118.6042495899675 },
+            { lat: 34.070430662877826, lng: -118.50969775715234 },
+            { lat: 34.088578771213434, lng: -118.4735095 },
+            { lat: 34.088578771213434, lng: -118.4735095 }
+          ];
+          var shapesCoords2 = response.results[0].shapes.map(function(polygon) {
+            var shell = ringCoordsHashToArray(isochronePoints2);
+            var holes = [];
+            return [shell].concat(holes);
+          });
+          var polygon2 = L.polygon(shapesCoords2, { color: 'blue' });
+          polygon2.addTo(map);
+
+          L.marker({ lat: 34.0206218, lng: -118.4735095 }).addTo(map);
+          // L.marker({ lat: 40.743731, lng: -74.006026 }).addTo(map);
+          // L.marker({ lat: 40.7375466, lng: -74.0025111 }).addTo(map);
 
           map.fitBounds(polygon.getBounds());
         }
