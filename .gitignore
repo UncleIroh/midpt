@@ -12,6 +12,7 @@
 /build
 
 # misc
+/client/components/frontendConfig.js
 .env
 .DS_Store
 .env

@@ -28,37 +28,31 @@ class App extends Component {
       points: [this.state.loca, this.state.locb],
       departureTime: 'x'
     };
-    fetch('/buildroute', {
+    fetch('http://localhost:3000/buildroute', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     })
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
+      .then(response => {
+        console.log('raw server response', response);
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        this.setState({
+          result: {
+            point1: data.points[0],
+            point2: data.points[1],
+            midpt: data.midpt,
+            aToMidptURL: data.directionURLs[0],
+            bToMidptURL: data.directionURLs[1],
+            address1: data.addresses[0],
+            address2: data.addresses[1]
+          }
+        });
       });
-    // this.setState({
-    //   result: {
-    //     point1: {
-    //       lat: 33.988,
-    //       lng: -118.470
-    //     },
-    //     point2: {
-    //       lat: 33.941,
-    //       lng: -118.408
-    //     },
-    //     midpt: {
-    //       lat: 33.996,
-    //       lng: -118.434
-    //     },
-    //     aToMidptURL: 'http://maps.google.com/',
-    //     bToMidptURL: 'http://maps.google.com/',
-    //     address1: '1600 Main Street, Los Angeles, CA 90045',
-    //     address2: '1 World Way, Los Angeles, CA 90045'
-    //   }
-    // });
   }
   onRadioChange(e) {
     this.setState({ radioVal: [e.target.value] });

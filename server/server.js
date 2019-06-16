@@ -7,8 +7,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const isochroneController = require('./isochroneController');
 const googleMapsController = require('./googleMapsController');
 const centroidController = require('./centroidController');
+const cors = require('cors');
 
-// setup!
+app.use(cors());
 app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === 'production') {
@@ -19,6 +20,8 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../index.html'));
   });
 }
+
+console.log(process.env.NODE_ENV);
 
 app.listen(3000); //listens on port 3000 -> http://localhost:3000/
 console.log('this works, at least !');
