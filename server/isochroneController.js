@@ -81,6 +81,7 @@ isochroneController.generateIsochrones = (req, res, next) => {
     },
     debug: true
   });
+  let friendIsochrones = [];
   async function tryIntersection(time) {
     let curIntersection = null;
     let timeToTry = time;
@@ -89,7 +90,7 @@ isochroneController.generateIsochrones = (req, res, next) => {
         'trying isochrome intersection with a fairTime of ',
         timeToTry / 60
       );
-      const friendIsochrones = [];
+      friendIsochrones = [];
       for (let i = 0; i < 2; i++) {
         friendIsochrones.push(
           await new Promise((resolve, reject) => {
@@ -97,7 +98,7 @@ isochroneController.generateIsochrones = (req, res, next) => {
               lat: res.locals.points[i].lat,
               lng: res.locals.points[i].lng,
               cycles: 5,
-              slices: 5,
+              slices: 20,
               type: 'duration',
               value: timeToTry,
               mode: 'driving',
@@ -121,6 +122,14 @@ isochroneController.generateIsochrones = (req, res, next) => {
         friendIsochrones[1]
       );
       timeToTry = timeToTry * 1.2;
+    }
+    res.locals.isochrones = [];
+    for (let i = 0; i < 2; i += 1) {
+      res.locals.isochrones.push(
+        friendIsochrones[i].geometry.coordinates[i].map(point => {
+          return { lat: point[0], lng: point[1] };
+        })
+      );
     }
     res.locals.isoIntersectionPoints = curIntersection.geometry.coordinates[0].map(
       el => {
