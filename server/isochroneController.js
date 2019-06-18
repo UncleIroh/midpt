@@ -5,23 +5,24 @@ const turf = require('@turf/turf');
 const geocode = require('./geocode');
 
 const isochroneController = {};
-
+//this function turns addresses into latitude and longitude coordinates
 isochroneController.getCoords = (req, res, next) => {
-  //retrieve location data from req.body and parse
   res.locals.addresses = [];
   res.locals.points = [];
-  const dateObj = new Date();
+  //gets the time for our navigation queries
+  const dateObj = new Date(req.body.departureTime);
   res.locals.departureTimeISO = dateObj.toISOString(); // for time travel api
-  res.locals.departureTimeUNIX = Math.round(dateObj.valueOf() / 1000);
+  res.locals.departureTimeUNIX = Math.round(dateObj.valueOf() / 1000); //for google api
   // console.log('reqbody', req.body);
   let promArr = [];
   for (let i = 0; i < 2; i++) {
+    //removes whitespace, formats for queries
     let parsedStr = req.body['points'][i].replace(' ', '+');
-    //make a fetch request to API
     promArr.push(geocode(parsedStr));
   }
   Promise.all(promArr)
     .then(ptsAddresses => {
+      //catches each address and formats it into usable data
       ptsAddresses.forEach(ptAddressObj => {
         res.locals.addresses.push(ptAddressObj.formatted_address);
         res.locals.points.push(ptAddressObj.latLng);
@@ -34,14 +35,14 @@ isochroneController.getCoords = (req, res, next) => {
 };
 
 isochroneController.generateRoutes = (req, res, next) => {
-  let time1;
-  let time2;
   const promArr = [];
   for (let i = 0; i < 2; i++) {
     promArr.push(
       new Promise((resolve, reject) => {
+        //this syntax is just to make the code iterable
         const thisPt = res.locals.points[i % res.locals.points.length];
         const otherPt = res.locals.points[(i + 1) % res.locals.points.length];
+        //grabbing initial route info for FAIR TIME ALGORITHM
         request.get(
           `https://maps.googleapis.com/maps/api/directions/json?origin=
           ${thisPt.lat},${thisPt.lng}
@@ -58,7 +59,7 @@ isochroneController.generateRoutes = (req, res, next) => {
       })
     );
   }
-  //do the promise thing
+  //waits for queries and then logs travel times for verification and developer peace of mind
   Promise.all(promArr).then(values => {
     console.log(
       'finding a midpt between ',
@@ -68,91 +69,12 @@ isochroneController.generateRoutes = (req, res, next) => {
     );
     console.log('user1 travel time is ', values[0] / 60);
     console.log('user2 travel time is ', values[1] / 60);
+    //the FAIR TIME ALGORITHM
     (res.locals.fairTime = Math.ceil(
       (1 - values[0] / (values[0] + values[1])) * values[0]
     )),
       next();
   });
-};
-
-isochroneController.generateIsochronesSHITTYwithGOOGLE = (req, res, next) => {
-  // console.log('res locals', res.locals);
-  isochrone.load({
-    map: 'theMap',
-    key: process.env.GAPI_KEY, // Do change the key: it won't work on your domain anyway :-)
-    callback: function(iso) {
-      //placeholder
-    },
-    debug: true
-  });
-  let friendIsochrones = [];
-  async function tryIntersection(time) {
-    let curIntersection = null;
-    let timeToTry = time;
-    while (!curIntersection) {
-      timeToTry = timeToTry * 1.2;
-      console.log(
-        'trying isochrome intersection with a fairTime of ',
-        timeToTry / 60
-      );
-      friendIsochrones = [];
-      for (let i = 0; i < 2; i++) {
-        friendIsochrones.push(
-          await new Promise((resolve, reject) => {
-            isochrone.compute({
-              lat: res.locals.points[i].lat,
-              lng: res.locals.points[i].lng,
-              cycles: 5,
-              slices: 100,
-              type: 'duration',
-              value: timeToTry,
-              mode: 'driving',
-              key: process.env.GAPI_KEY,
-              callback: function(status, points) {
-                if (status === 'OK') {
-                  const curIsochrone = [];
-                  for (let pt of points) {
-                    curIsochrone.push([pt.lat, pt.lng]);
-                  }
-                  curIsochrone.push(curIsochrone[0]);
-                  resolve(turf.polygon([curIsochrone]));
-                }
-              }
-            });
-          })
-        );
-      }
-      curIntersection = turf.intersect(
-        friendIsochrones[0],
-        friendIsochrones[1]
-      );
-      // timeToTry = timeToTry * 1.2;
-    }
-    res.locals.isochrones = [];
-    for (let i = 0; i < 2; i += 1) {
-      res.locals.isochrones.push(
-        friendIsochrones[i].geometry.coordinates[0].map(point => {
-          return { lat: point[0], lng: point[1] };
-        })
-      );
-    }
-    console.log(curIntersection);
-    let coords = curIntersection.geometry.coordinates;
-    if (curIntersection.geometry.type === 'Polygon') {
-      res.locals.isoIntersectionPoints = coords[0].map(el => {
-        return { lat: el[0], lng: el[1] };
-      });
-    } else {
-      console.log('its a muli', coords[0]);
-      res.locals.isoIntersectionPoints = coords.map(el => {
-        return { lat: el[0], lng: el[1] };
-      });
-    }
-    // console.log('intersection found!!!!', res.locals.isoIntersectionPoints);
-    next();
-  }
-
-  tryIntersection(res.locals.fairTime);
 };
 
 isochroneController.generateIsochrones = (req, res, next) => {
